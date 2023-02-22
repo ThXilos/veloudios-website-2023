@@ -18,7 +18,6 @@ app.get("/", (req, res) => {
 });
 app.post("/api/sendemail", async (req, res) => {
   const { mail, typeOfService, shortDescription } = req.body;
-
   try {
     const send_to = process.env.EMAIL_USER;
     const sent_from = process.env.EMAIL_USER;
