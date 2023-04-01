@@ -5,18 +5,28 @@ const bodyParser = require("body-parser");
 
 const app = express();
 
+const corsOptions = {
+  origin: "https://tinosmiles.gr",
+  optionSuccessStatus: 200,
+};
+
 const sendEmail = require("./utils/sendEmail");
 
 //Middleware
 app.use(express.json());
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors(corsOptions));
 
 //Routes
 app.get("/", (req, res) => {
-  res.send("All ok");
+  res.send(`Velfilters Service Running ${new Date()}`);
 });
+
 app.post("/api/sendemail", async (req, res) => {
+  const origin = req.get("Origin");
+  if (origin !== corsOptions.origin) {
+    return res.status(403).send("Forbidden");
+  }
   const { mail, typeOfService, shortDescription } = req.body;
   try {
     const send_to = process.env.EMAIL_USER;
